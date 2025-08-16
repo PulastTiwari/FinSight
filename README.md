@@ -1,51 +1,93 @@
 # Financial Transaction Analyzer
 
-# Financial Transaction Analyzer
+Welcome to the Financial Transaction Analyzer! This project is designed to help you learn about machine learning for finance, anomaly detection, and building full-stack web applications. Whether you're a beginner or an experienced developer, you'll find step-by-step instructions and explanations here.
 
-This MVP uses machine learning to categorize financial transactions and detect anomalies in real time. It features a Flask backend and a React + Material-UI frontend.
+## What is this project?
 
-## Features
+This MVP (Minimum Viable Product) uses machine learning to automatically categorize financial transactions (like salary, travel, utilities, procurement) and detect unusual (anomalous) transactions. It has:
 
-- ML-powered categorization (TF-IDF + Random Forest)
-- Real-time anomaly detection (Isolation Forest)
-- Interactive dashboard with charts and analytics
-- AI workflow automation with confidence scoring
+- A **Flask backend** (Python) for ML and API logic
+- A **React frontend** (JavaScript) for interactive dashboards and analysis
 
-## Getting Started
+## Concepts Explained
 
-### Backend
+**Categorization:**
+We use TF-IDF (text feature extraction) and a Random Forest classifier to predict the category of a transaction based on its description and amount.
 
-1. Create and activate a Python virtual environment:
+**Anomaly Detection:**
+We use Isolation Forest, a popular ML algorithm, to flag transactions that are unusual compared to typical spending patterns.
+
+**Full-Stack Workflow:**
+Frontend (React) sends transaction data to the backend (Flask), which returns predictions and analytics. The frontend displays charts and results in real time.
+
+## Step-by-Step Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/PulastTiwari/FinSight.git
+cd FinSight
+```
+
+### 2. Set Up the Backend (Python)
+
+1. Go to the backend folder:
    ```bash
    cd backend
+   ```
+2. Create a virtual environment (recommended):
+   ```bash
    python3 -m venv ../.venv
    source ../.venv/bin/activate
    ```
-2. Install dependencies:
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the backend:
+4. Start the backend server:
    ```bash
    python app.py
    ```
+   The backend will run at `http://localhost:5000`.
 
-### Frontend
+### 3. Set Up the Frontend (React)
 
-1. Install dependencies:
+1. Open a new terminal and go to the frontend folder:
    ```bash
    cd frontend
+   ```
+2. Install dependencies:
+   ```bash
    npm install
    ```
-2. Start the frontend:
+3. Start the frontend server:
    ```bash
    npm start
    ```
+   The frontend will run at `http://localhost:3000` (or another port if 3000 is busy).
+
+### 4. Try It Out!
+
+- Open your browser and go to `http://localhost:3000`.
+- Use the dashboard to view analytics and charts.
+- Use the "Analyze Transaction" tab to test with your own transaction descriptions and amounts.
+
+### 5. Example Transactions
+
+Try these in the Analyze tab:
+
+- Description: `HUGE EQUIPMENT PURCHASE`, Amount: `25000` (should be flagged as anomaly)
+- Description: `MONTHLY SALARY PAYMENT`, Amount: `3500` (should be normal)
+- Description: `ELECTRIC COMPANY BILL`, Amount: `150` (should be utilities)
 
 ## Contributing
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+We welcome contributions! If you want to add features, fix bugs, or improve documentation:
+
+- Fork the repo and create a branch
+- Make your changes and submit a pull request
+- For big changes, open an issue first to discuss ideas
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
