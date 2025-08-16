@@ -1,0 +1,14 @@
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Python virtual env
+/backend/venv/
+# Node modules
+/frontend/node_modules/
+# Environment files
+.env
+# IDEs
+/.vscode/
+*.pyc
+__pycache__/
+/.DS_Store
