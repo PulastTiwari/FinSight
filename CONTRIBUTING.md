@@ -1,26 +1,47 @@
-# Contributing to Financial Transaction Analyzer
+# Contributing to FinSightAI
 
-Thank you for your interest in contributing! Please follow these guidelines to help us maintain and improve the project.
+Thank you for your interest in contributing to FinSightAI! We welcome all contributions: features, bug fixes, documentation, and UI/UX improvements.
 
 ## How to Contribute
 
-- Fork the repository and create your branch from `main`.
-- If you've added code, ensure it is well-documented and tested.
-- Submit a pull request describing your changes.
-- For major changes, open an issue first to discuss your proposal.
+1. **Fork the repository** and create a feature branch from `main`.
+2. **Describe your changes** clearly in commit messages and pull requests.
+3. **Test your code** (frontend and backend) before submitting.
+4. **Submit a pull request** with a summary of your changes and screenshots if UI-related.
+5. For major changes, open an issue first to discuss your proposal.
 
-## Code Style
+## Code Style & Guidelines
 
-- Use clear, descriptive commit messages.
-- Follow PEP8 for Python code and standard React/JS best practices for frontend.
-- Write unit tests for new features and bug fixes.
+- **Frontend (React):**
+  - Use [Prettier](https://prettier.io/) for formatting
+  - Follow [Ant Design](https://ant.design/docs/spec/introduce) UI patterns
+  - Use functional components and hooks
+  - Keep code modular and well-commented
+- **Backend (Python/Flask):**
+  - Follow [PEP8](https://www.python.org/dev/peps/pep-0008/) style
+  - Document endpoints and ML logic
+  - Write clear, maintainable code
 
-## Reporting Issues
+## Feature Guidelines
 
-- Use GitHub Issues to report bugs or request features.
-- Provide as much detail as possible, including steps to reproduce and environment information.
+- **AI/ML Features:**
+  - Add tests for new models or analytics
+  - Document new endpoints in README.md
+- **UI/UX:**
+  - Use Ant Design components for consistency
+  - Ensure dark/light mode compatibility
+- **Documentation:**
+  - Update README.md and SETUP_GUIDE.md for new features
+
+## Issues & Feature Requests
+
+Found a bug or want a new feature? [Open an issue](https://github.com/PulastTiwari/FinSight/issues) with details and steps to reproduce.
 
 ## Community
 
 - Be respectful and constructive in all communications.
 - Help others by reviewing pull requests and answering questions.
+
+## License
+
+By contributing, you agree your work will be released under the MIT License.

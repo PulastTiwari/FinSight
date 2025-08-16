@@ -1,13 +1,100 @@
-# Financial Transaction Analyzer
+# FinSightAI: Smart Financial Operations Platform
 
-Welcome to the Financial Transaction Analyzer! This project is designed to help you learn about machine learning for finance, anomaly detection, and building full-stack web applications. Whether you're a beginner or an experienced developer, you'll find step-by-step instructions and explanations here.
+FinSightAI is an open-source platform for advanced financial operations, providing AI-driven analytics, anomaly detection, and a modern interactive dashboard. It is suitable for hackathons, enterprise demonstrations, and full-stack AI development.
 
-## What is this project?
+## Key Features
 
-This MVP (Minimum Viable Product) uses machine learning to automatically categorize financial transactions (like salary, travel, utilities, procurement) and detect unusual (anomalous) transactions. It has:
+- **AI Chatbot Assistant**: Natural language financial advisor for transaction queries and insights
+- **Smart Insights Dashboard**: Automated recommendations and analytics based on financial data
+- **Modern UI/UX**: Built with Ant Design and Framer Motion, supporting dark and light modes
+- **Advanced Analytics**: Interactive charts and data visualizations using Recharts
+- **Real-time Notifications**: User feedback via toast notifications
+- **Anomaly Detection**: Machine learning-based transaction analysis for outlier detection
 
-- A **Flask backend** (Python) for ML and API logic
-- A **React frontend** (JavaScript) for interactive dashboards and analysis
+## Architecture
+
+- **Backend**: Flask (Python), pandas, scikit-learn
+- **Frontend**: React (JavaScript), Ant Design, Framer Motion, Recharts
+
+## Technical Overview
+
+**Transaction Categorization:**
+Uses TF-IDF vectorization and a Random Forest classifier to predict transaction categories.
+
+**Anomaly Detection:**
+Employs Isolation Forest to identify anomalous transactions.
+
+**Full-Stack Workflow:**
+The React frontend communicates with the Flask backend via RESTful APIs, sending transaction data and receiving predictions and analytics for real-time display.
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/PulastTiwari/FinSight.git
+cd FinSight
+```
+
+### 2. Backend Setup (Python/Flask)
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Create a Python virtual environment:
+   ```bash
+   python3 -m venv ../.venv
+   source ../.venv/bin/activate
+   ```
+3. Install required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Start the backend server:
+   ```bash
+   python app.py
+   ```
+   The backend will be available at `http://localhost:5002`.
+
+### 3. Frontend Setup (React)
+
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the frontend server:
+   ```bash
+   npm start
+   ```
+   The frontend will be available at `http://localhost:3000`.
+
+### 4. Usage
+
+- Access the dashboard at `http://localhost:3000`.
+- Use the analytics and charting features.
+- Interact with the AI Assistant for financial queries.
+- Analyze transactions for categorization and anomaly detection.
+
+### 5. Example Transactions
+
+Sample inputs for testing in the Analyze tab:
+
+- Description: `HUGE EQUIPMENT PURCHASE`, Amount: `25000` (expected: anomaly)
+- Description: `MONTHLY SALARY PAYMENT`, Amount: `3500` (expected: normal)
+- Description: `ELECTRIC COMPANY BILL`, Amount: `150` (expected: utilities)
+
+## Contributing
+
+Contributions are welcome. Please refer to `CONTRIBUTING.md` for guidelines on submitting features, bug fixes, or documentation improvements.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Concepts Explained
 
