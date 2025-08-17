@@ -492,8 +492,6 @@ See `CONTRIBUTING.md` for coding standards, tests, and branch strategy. Create a
 
 ---
 
-## License
-
 ## Community & Discussions
 
 We host open discussion using GitHub Discussions. If you have questions, ideas, or want to show a demo, please use the Discussions tab on the repository (or open an issue when appropriate).
