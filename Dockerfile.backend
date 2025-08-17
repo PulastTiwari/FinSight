@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Allow fast builds: pass --build-arg USE_LIGHT=0 to install full requirements
+ARG USE_LIGHT=1
+
+# Install minimal build deps
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential gcc && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt ./requirements.txt
+COPY backend/requirements.light.txt ./requirements.light.txt
+RUN python3 -m pip install --upgrade pip
+# Install light requirements by default to keep image small and fast for demos/CI
+RUN if [ "$USE_LIGHT" = "1" ]; then pip3 install --no-cache-dir -r requirements.light.txt; else pip3 install --no-cache-dir -r requirements.txt; fi
+
+COPY backend/ /app/
+
+# Default to fast startup (skip heavy ML training). Override with env var.
+ENV SKIP_ML=1
+
+EXPOSE 5002
+
+CMD ["python3","app.py"]
+

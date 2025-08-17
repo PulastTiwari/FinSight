@@ -1,0 +1,108 @@
+name: Build and Publish Docker images + Smoke tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-push:
+    name: Build and push demo + full-ML images (with cache)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          # Use GITHUB_TOKEN which has write:packages permission in this repo
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore build cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and push demo (light) image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile.backend
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/finsight-backend:demo-${{ github.sha }}
+          build-args: |
+            USE_LIGHT=1
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+      - name: Build and push full-ML image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile.backend
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/finsight-backend:full-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/finsight-backend:latest-full
+          build-args: |
+            USE_LIGHT=0
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/finsight-frontend:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+  post-deploy-smoke:
+    name: Post-deploy smoke tests (compose)
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start docker-compose
+        run: |
+          docker compose up -d --build
+
+      - name: Wait for backend
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:5002/api/health >/dev/null 2>&1; then
+              echo "backend healthy"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Run smoke checks
+        run: |
+          set -euo pipefail
+          echo "== health =="
+          curl -fsS http://127.0.0.1:5002/api/health
+          echo "== analytics (may 404) =="
+          curl -fsS http://127.0.0.1:5002/api/analytics || true
+
+      - name: Tear down compose
+        if: always()
+        run: docker compose down --volumes

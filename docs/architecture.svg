@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320" role="img" aria-label="FinSight architecture diagram">
   <style>
     .box { fill:#f7f9fc; stroke:#2b6cb0; stroke-width:2; rx:8; }
     .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#1a202c }
@@ -13,31 +13,32 @@
   </defs>
 
   <!-- Frontend -->
-  <rect x="40" y="40" width="160" height="80" class="box"/>
-  <text x="120" y="70" text-anchor="middle" class="text">Frontend</text>
-  <text x="120" y="90" text-anchor="middle" class="label">React SPA</text>
+  <rect x="60" y="60" width="180" height="90" class="box"/>
+  <text x="150" y="95" text-anchor="middle" class="text">Frontend</text>
+  <text x="150" y="115" text-anchor="middle" class="label">React SPA</text>
 
   <!-- Backend -->
-  <rect x="320" y="30" width="200" height="100" class="box"/>
-  <text x="420" y="60" text-anchor="middle" class="text">Backend</text>
-  <text x="420" y="80" text-anchor="middle" class="label">Flask API + Rules</text>
+  <rect x="360" y="50" width="240" height="110" class="box"/>
+  <text x="480" y="85" text-anchor="middle" class="text">Backend</text>
+  <text x="480" y="105" text-anchor="middle" class="label">Flask API + Rules</text>
 
   <!-- Models -->
-  <rect x="580" y="40" width="160" height="80" class="box"/>
-  <text x="660" y="70" text-anchor="middle" class="text">Models</text>
-  <text x="660" y="90" text-anchor="middle" class="label">sklearn / joblib</text>
+  <rect x="660" y="60" width="180" height="90" class="box"/>
+  <text x="750" y="95" text-anchor="middle" class="text">Models</text>
+  <text x="750" y="115" text-anchor="middle" class="label">sklearn / joblib</text>
 
   <!-- arrows -->
-  <line x1="200" y1="80" x2="320" y2="80" class="arrow" />
-  <line x1="520" y1="80" x2="580" y2="80" class="arrow" />
+  <line x1="240" y1="105" x2="360" y2="105" class="arrow" />
+  <line x1="600" y1="105" x2="660" y2="105" class="arrow" />
 
   <!-- bottom store -->
-  <rect x="300" y="170" width="320" height="60" class="box"/>
-  <text x="460" y="200" text-anchor="middle" class="text">Persistence / Artifacts</text>
-  <text x="460" y="220" text-anchor="middle" class="label">backend/rules.json, model.joblib</text>
+  <rect x="320" y="200" width="260" height="70" class="box"/>
+  <text x="450" y="235" text-anchor="middle" class="text">Persistence / Artifacts</text>
+  <text x="450" y="255" text-anchor="middle" class="label">backend/rules.json, model.joblib</text>
 
-  <line x1="420" y1="130" x2="420" y2="170" class="arrow" />
+  <line x1="480" y1="160" x2="480" y2="200" class="arrow" />
 
   <!-- note -->
-  <text x="400" y="260" text-anchor="middle" class="label">docker-compose brings frontend + backend together for local demos</text>
+  <text x="450" y="295" text-anchor="middle" class="label">docker-compose brings frontend + backend together for local demos</text>
+
 </svg>

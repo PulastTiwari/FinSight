@@ -1,0 +1,16 @@
+[
+  {
+    "id": "rule_salary",
+    "enabled": true,
+    "priority": 10,
+    "condition": { "field": "description", "op": "contains", "value": "salary" },
+    "action": { "type": "set_category", "category": "Salary" }
+  },
+  {
+    "id": "rule_large_purchase",
+    "enabled": true,
+    "priority": 5,
+    "condition": { "field": "amount", "op": "gt", "value": 10000 },
+    "action": { "type": "flag", "flag": "review", "reason": "large amount" }
+  }
+]
