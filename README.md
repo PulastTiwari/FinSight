@@ -6,12 +6,30 @@
 
 The Financial Transaction Analyzer (FinSight) is an opinionated, open-source MVP for processing and analyzing transactional financial data. It combines deterministic business rules, lightweight ML models, and a modern React dashboard to provide explainable categorization, anomaly detection, and developer-friendly instrumentation for experiments and demos.
 
-## Table of contents
+## Index
 
-- [Architecture diagram](#architecture)
-- Setup & Local dev
-- Running tests
-  Below is a high-level architecture diagram. If your viewer doesn't render SVGs, the PNG fallback will be used.
+- Quickstart
+- API examples
+- Where to start (good first tasks)
+- Repository contents & structure
+- Architecture
+- Setup Instructions (cross-platform)
+- Troubleshooting
+- Data flow and API surface
+- Models and training notes
+- Example use-cases
+- Operational notes
+- Runtime configuration
+- Running tests (backend)
+- Docker
+- Deployment troubleshooting & recovery
+- Contributing & Where to start
+- Security & Code of Conduct
+- License
+
+## Architecture
+
+Below is a high-level architecture diagram. If your viewer doesn't render SVGs, the PNG fallback will be used.
 
 <figure>
   <picture>
@@ -21,12 +39,7 @@ The Financial Transaction Analyzer (FinSight) is an opinionated, open-source MVP
   <figcaption>FinSight architecture — Frontend (React) ↔ Backend (Flask + Rules) ↔ Models / Persistence. Click the image to open the full diagram.</figcaption>
 </figure>
 
-[Open the diagram file](./docs/architecture.svg)
-
-- Troubleshooting
-- Contributing & Where to start
-- Security & Code of Conduct
-- License
+<!-- diagram file available at ./docs/architecture.svg (removed from index) -->
 
 ## Quickstart
 
