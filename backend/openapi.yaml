@@ -1,0 +1,196 @@
+openapi: 3.0.3
+info:
+  title: FinSight API
+  version: 1.0.0
+  description: OpenAPI stub for the FinSight demo API. Use this as the source-of-truth for clients and documentation.
+servers:
+  - url: http://127.0.0.1:5002
+paths:
+  /api/categorize:
+    post:
+      summary: Classify a transaction, apply rules, and return confidence and anomaly score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          description: Classification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategorizeResponse'
+        '400':
+          description: Bad request (malformed payload)
+        '500':
+          description: Server error
+
+  /api/analytics:
+    get:
+      summary: Return aggregated metrics used by dashboard charts
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Analytics payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  by_category:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                  anomalies:
+                    type: integer
+                  samples:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransactionSample'
+
+  /api/rules:
+    get:
+      summary: List rules
+      responses:
+        '200':
+          description: Array of rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rule'
+    post:
+      summary: Create or update a rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Rule created/updated
+
+  /api/rules/{id}:
+    delete:
+      summary: Delete a rule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /api/version:
+    get:
+      summary: Service version and model metadata (optional)
+      responses:
+        '200':
+          description: Version metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                  model:
+                    type: object
+                    nullable: true
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      required: [description, amount, date]
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: float
+        date:
+          type: string
+          format: date
+        merchant:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+    CategorizeResponse:
+      type: object
+      properties:
+        category:
+          type: string
+        rule_matched:
+          type: string
+          nullable: true
+        confidence:
+          type: number
+          format: float
+        anomaly_score:
+          type: number
+          format: float
+        is_anomaly:
+          type: boolean
+
+    TransactionSample:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            anomaly_score:
+              type: number
+              format: float
+
+    Rule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        matcher:
+          type: object
+          description: "Small matcher object used by the rule engine (implementation-defined)"
+        action:
+          type: object
+          description: "Action to take when rule matches (e.g., set category)"

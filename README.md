@@ -254,80 +254,18 @@ See `QUICKSTART.md` for a shorter demo-focused flow.
 
 ## Data flow and API surface (contract)
 
-This section summarizes the stable API contract the frontend and integrators should rely on. Keep the surface small and predictable so tests and the UI remain simple.
+The detailed API contract lives in an OpenAPI file so it can be used for client generation, testing, and documentation.
 
-Content type: JSON (application/json)
+See `backend/openapi.yaml` for the full request/response contract (includes `/api/categorize`, `/api/analytics`, rules management, and health endpoints).
 
-Common response envelope (errors):
+Short summary: the API is JSON-first. Key endpoints:
 
-{
-  "error": "short message",
-  "details": { ... }   # optional, implementation-defined
-}
+- POST `/api/categorize` — classify a transaction, returns category, confidence, and anomaly score.
+- GET `/api/analytics` — return aggregates and sample transactions for dashboard charts.
+- Rules management: GET/POST `/api/rules`, DELETE `/api/rules/{id}`.
+- GET `/api/health` — lightweight health check (JSON).
 
-1) POST /api/categorize
-- Purpose: classify a single transaction, apply rules, return ML confidence and anomaly score.
-- Request body:
-
-  {
-    "description": "string",
-    "amount": number,
-    "date": "YYYY-MM-DD",
-    // optional fields used by rules/models
-    "merchant": "string",
-    "metadata": { ... }
-  }
-
-- Success response (200):
-
-  {
-    "category": "string",
-    "rule_matched": "<rule_id|null>",
-    "confidence": 0.0-1.0,
-    "anomaly_score": 0.0-1.0,
-    "is_anomaly": true|false
-  }
-
-- Errors: 400 for malformed payload, 500 for server errors.
-
-Example request:
-
-```json
-{
-  "description": "ACME OFFICE SUPPLIES",
-  "amount": 123.45,
-  "date": "2025-01-01"
-}
-```
-
-2) GET /api/analytics
-- Purpose: return aggregated metrics used by dashboard charts (counts by category, anomaly counts, recent samples).
-- Query params: optional `start_date`, `end_date`, `limit` (for sample lists)
-- Success response (200): object with `by_category`, `anomalies`, `samples` arrays.
-
-3) Rules management
-- GET /api/rules — list rules (used by UI rule editor)
-- POST /api/rules — add or update a rule (accepts rule JSON)
-- DELETE /api/rules/<id> — remove a rule
-
-Responses for management endpoints follow common status codes (200/201/204 for success, 400/404/409 for errors).
-
-4) Health & metadata
-- GET /api/health — lightweight health object {"status":"ok"}
-- GET /api/version or /api/metadata — optional, returns service version and model metadata if available
-
-Notes and contract guarantees
-- Content-type is always application/json for API endpoints.
-- The `rule_matched` field is authoritative when non-null — rules override ML predictions.
-- The `confidence` is a best-effort floating number; do not use it as a strict probability in production without calibration.
-- No authentication is enforced by default in the MVP; add auth middleware for production deployments.
-
-Pagination and rate-limits
-- Management endpoints may paginate large lists; callers should expect `limit`/`offset` or cursor-based paging in future versions.
-- No built-in rate limit in the demo; enforce API limits in front of the service in production.
-
-Versioning
-- If breaking API changes are introduced, increment the API version (eg. /v2/) and keep the previous path for a reasonable migration window.
+If you need a machine-readable contract (for tests or client codegen), use `backend/openapi.yaml` as the source-of-truth.
 
 
 ## Models and training notes
