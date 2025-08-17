@@ -36,6 +36,7 @@ Below is a high-level architecture diagram. If your viewer doesn't render SVGs, 
     <source type="image/svg+xml" srcset="./docs/architecture.svg">
     <img src="./docs/architecture.png" alt="FinSight architecture diagram" style="max-width:100%; height:auto;" />
   </picture>
+--
   <figcaption>FinSight architecture — Frontend (React) ↔ Backend (Flask + Rules) ↔ Models / Persistence. Click the image to open the full diagram.</figcaption>
 </figure>
 
