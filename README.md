@@ -254,6 +254,19 @@ See `QUICKSTART.md` for a shorter demo-focused flow.
 
 ## Data flow and API surface (contract)
 
+## Community & Discussions
+
+We host open discussion using GitHub Discussions. If you have questions, ideas, or want to show a demo, please use the Discussions tab on the repository (or open an issue when appropriate).
+
+Quick links:
+
+- Discussions: https://github.com/PulastTiwari/FinSight/discussions
+- CONTRIBUTING guide: ./CONTRIBUTING.md
+- Community templates and starter posts: ./.github/DISCUSSIONS-STARTERS.md
+
+If you'd like starter pinned topics created (Welcome / Roadmap), say so and a maintainer can pin them in the Discussions UI.
+
+
 1.  Frontend sends a transaction payload to the backend (`POST /api/categorize`):
 
 - Input shape: {"description": string, "amount": number, "date": "YYYY-MM-DD", ...}
