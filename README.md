@@ -254,27 +254,81 @@ See `QUICKSTART.md` for a shorter demo-focused flow.
 
 ## Data flow and API surface (contract)
 
-## Community & Discussions
+This section summarizes the stable API contract the frontend and integrators should rely on. Keep the surface small and predictable so tests and the UI remain simple.
 
-We host open discussion using GitHub Discussions. If you have questions, ideas, or want to show a demo, please use the Discussions tab on the repository (or open an issue when appropriate).
+Content type: JSON (application/json)
 
-Quick links:
+Common response envelope (errors):
 
-- Discussions: https://github.com/PulastTiwari/FinSight/discussions
-- CONTRIBUTING guide: ./CONTRIBUTING.md
-- Community templates and starter posts: ./.github/DISCUSSIONS-STARTERS.md
+{
+  "error": "short message",
+  "details": { ... }   # optional, implementation-defined
+}
 
-If you'd like starter pinned topics created (Welcome / Roadmap), say so and a maintainer can pin them in the Discussions UI.
+1) POST /api/categorize
+- Purpose: classify a single transaction, apply rules, return ML confidence and anomaly score.
+- Request body:
 
+  {
+    "description": "string",
+    "amount": number,
+    "date": "YYYY-MM-DD",
+    // optional fields used by rules/models
+    "merchant": "string",
+    "metadata": { ... }
+  }
 
-1.  Frontend sends a transaction payload to the backend (`POST /api/categorize`):
+- Success response (200):
 
-- Input shape: {"description": string, "amount": number, "date": "YYYY-MM-DD", ...}
-- Output: {"category": string, "rule_matched": <rule_id|null>, "confidence": float, "anomaly_score": float, "is_anomaly": bool}
+  {
+    "category": "string",
+    "rule_matched": "<rule_id|null>",
+    "confidence": 0.0-1.0,
+    "anomaly_score": 0.0-1.0,
+    "is_anomaly": true|false
+  }
 
-2.  Analytics request (`GET /api/analytics`) returns aggregates used for charts (counts by category, running totals, anomaly counts) and sample anomalous transactions for drill-down.
+- Errors: 400 for malformed payload, 500 for server errors.
 
-3.  Rules CRUD (`GET/POST /api/rules`, `DELETE /api/rules/<id>`) allows programmatic management of deterministic rules.
+Example request:
+
+```json
+{
+  "description": "ACME OFFICE SUPPLIES",
+  "amount": 123.45,
+  "date": "2025-01-01"
+}
+```
+
+2) GET /api/analytics
+- Purpose: return aggregated metrics used by dashboard charts (counts by category, anomaly counts, recent samples).
+- Query params: optional `start_date`, `end_date`, `limit` (for sample lists)
+- Success response (200): object with `by_category`, `anomalies`, `samples` arrays.
+
+3) Rules management
+- GET /api/rules — list rules (used by UI rule editor)
+- POST /api/rules — add or update a rule (accepts rule JSON)
+- DELETE /api/rules/<id> — remove a rule
+
+Responses for management endpoints follow common status codes (200/201/204 for success, 400/404/409 for errors).
+
+4) Health & metadata
+- GET /api/health — lightweight health object {"status":"ok"}
+- GET /api/version or /api/metadata — optional, returns service version and model metadata if available
+
+Notes and contract guarantees
+- Content-type is always application/json for API endpoints.
+- The `rule_matched` field is authoritative when non-null — rules override ML predictions.
+- The `confidence` is a best-effort floating number; do not use it as a strict probability in production without calibration.
+- No authentication is enforced by default in the MVP; add auth middleware for production deployments.
+
+Pagination and rate-limits
+- Management endpoints may paginate large lists; callers should expect `limit`/`offset` or cursor-based paging in future versions.
+- No built-in rate limit in the demo; enforce API limits in front of the service in production.
+
+Versioning
+- If breaking API changes are introduced, increment the API version (eg. /v2/) and keep the previous path for a reasonable migration window.
+
 
 ## Models and training notes
 
@@ -499,6 +553,21 @@ pip install -r requirements.light.txt
 See `CONTRIBUTING.md` for coding standards, tests, and branch strategy. Create a PR for significant changes and reference related issues.
 
 ---
+
+## License
+
+## Community & Discussions
+
+We host open discussion using GitHub Discussions. If you have questions, ideas, or want to show a demo, please use the Discussions tab on the repository (or open an issue when appropriate).
+
+Quick links:
+
+- Discussions: https://github.com/PulastTiwari/FinSight/discussions
+- CONTRIBUTING guide: ./CONTRIBUTING.md
+- Community templates and starter posts: ./.github/DISCUSSIONS-STARTERS.md
+
+If you'd like starter pinned topics created (Welcome / Roadmap), say so and a maintainer can pin them in the Discussions UI.
+
 
 ## License
 
